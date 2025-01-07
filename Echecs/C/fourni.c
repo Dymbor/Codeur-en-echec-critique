@@ -114,3 +114,13 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 	}
 }
 
+bool estDansGrille(int ligne, int colonne){
+	if(ligne<8 && colonne<8)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
