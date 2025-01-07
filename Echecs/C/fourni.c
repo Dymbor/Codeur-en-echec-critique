@@ -136,9 +136,9 @@ bool estCaseVide(const char grille[N][N], int ligne, int colonne){
 }
 
 bool videGrille(char grille[N][N]) {
-	for (int i; i < N; i++) {
-		for (int j; j < N; j++) {
-			c = CASE_VIDE;
+	for (int i=0; i < N; i++) {
+		for (int j=0; j < N; j++) {
+			grille[i][j] = CASE_VIDE;
 		}
 	}
 }
