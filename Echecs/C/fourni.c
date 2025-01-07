@@ -82,7 +82,9 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
 
 int main(void)
 {
+
 	char grille[N][N];
+	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 	initialiseEchiquier(char grille[N][N]);
 	afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut);
@@ -115,6 +117,7 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 	}
 }
 
+//////////////////////////////////////////
 bool estDansGrille(int ligne, int colonne){
 	if(ligne<8 && colonne<8)
 	{
@@ -123,5 +126,16 @@ bool estDansGrille(int ligne, int colonne){
 	else
 	{
 		return false;
+	}
+}
+
+void copieGrille(char copie[N][N], const char grille[N][N])
+{
+	for(int i=0; i<N; i++)
+	{
+		for(int j=0; j<N; j++)
+		{
+			copie[i][j] = grille[i][j];
+		}
 	}
 }
