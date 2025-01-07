@@ -116,7 +116,7 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 }
 bool estDansGrille(int ligne, int colonne)
 {
-	scanf("&d&d", &ligne, &colonne);
+	scanf("%d%d", &ligne, &colonne);
 	if (ligne >= 0 && ligne < N && colonne >= 0 && colonne < N) {
 		return true;
 	}
