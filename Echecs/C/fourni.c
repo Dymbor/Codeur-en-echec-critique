@@ -114,14 +114,32 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 		printf("\e[1;%dm%c\e[0m", couleurChar+91, c);
 	}
 }
-
-bool estDansGrille(int ligne, int colonne){
-	if(ligne<8 && colonne<8)
-	{
+bool estDansGrille(int ligne, int colonne)
+{
+	scanf("&d&d", &ligne, &colonne);
+	if (ligne >= 0 && ligne < N && colonne >= 0 && colonne < N) {
 		return true;
 	}
-	else
-	{
+	else {
 		return false;
 	}
 }
+
+bool estCaseVide(const char grille[N][N], int ligne, int colonne){
+	if (grille[ligne][colonne] == CASE_VIDE) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+bool videGrille(char grille[N][N]) {
+	for (int i; i < N; i++) {
+		for (int j; j < N; j++) {
+			c = CASE_VIDE;
+		}
+	}
+}
+
