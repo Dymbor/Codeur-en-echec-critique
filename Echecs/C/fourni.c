@@ -83,6 +83,8 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
 int main(void)
 {
 	const size_t temps_debut = time(NULL); // temps de départ
+	initialiseEchiquier(char grille[N][N]);
+	afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut);
 	// TODO
 	return 0;
 }
