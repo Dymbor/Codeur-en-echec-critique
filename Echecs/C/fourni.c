@@ -87,6 +87,7 @@ int main(void)
 	
 	char grille[N][N];
 	int couleur = C_VIDE;
+	char grille[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 
 	initialiseEchiquier(grille);
@@ -133,6 +134,34 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 	}
 	else {
 		printf("\e[1;%dm%c\e[0m", couleurChar+91, c);
+	}
+}
+bool estDansGrille(int ligne, int colonne)
+{
+	scanf("%d%d", &ligne, &colonne);
+	if (ligne >= 0 && ligne < N && colonne >= 0 && colonne < N) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool estCaseVide(const char grille[N][N], int ligne, int colonne){
+	if (grille[ligne][colonne] == CASE_VIDE) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+bool videGrille(char grille[N][N]) {
+	for (int i=0; i < N; i++) {
+		for (int j=0; j < N; j++) {
+			grille[i][j] = CASE_VIDE;
+		}
 	}
 }
 
