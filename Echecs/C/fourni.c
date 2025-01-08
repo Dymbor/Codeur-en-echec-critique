@@ -178,3 +178,29 @@ void saisieCoup(char grille[N][N]){
  realiseCoupSiValide(grille,depart, arrivee) ;
 
 };
+
+//////////////////////////////////////////
+// Fonctions Ethan:
+void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
+	effaceConsole();
+
+	printf("Coup n°%d\n", num_coup); //défini quel joueur doit jouer
+	if(num_coup % 2 != 0){
+		printf("Tour du joueur: blanc\n");
+	}
+	else{
+		printf("Tour du joueur: noir\n");
+
+	printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
+	
+	printf("+---+---+---+---+---+---+---+---+\n");
+	for (int i = 0; i < N; i++) {
+		printf("%d|", i+1);
+		for (int j = 0; j < N; j++) {
+			afficheCaseEnCouleur(grille[i][j], C_VIDE);
+		}
+		printf("|\n");
+	}
+	printf("+---+---+---+---+---+---+---+---+\n");
+	printf("  A\tB\tC\tD\tE\tF\tG\tH\n");
+}
