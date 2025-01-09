@@ -82,14 +82,33 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
 
 int main(void)
 {
+	int Etatpartie = NON_TERMINEE;
+	int num_coup = 0;
+	
+	char grille[N][N];
+	int couleur = C_VIDE;
 	char grille[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
-	initialiseEchiquier(char grille[N][N]);
-	afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut);
-	// TODO
+
+	initialiseEchiquier(grille);
+	while (Etatpartie == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+		afficheEchiquier (grille, num_coup, temps_debut);
+		saisieCoup(grille);
+		partieTerminee(grille, couleur);
+	}
+	afficheEchiquier(grille, num_coup, temps_debut);
+
+	if (Etatpartie == DEFAITE_BLANC){ 
+		printf("Les noirs ont gagné\n"); //nom de la fonction a modifier au bsn de la fonction partieTerminee
+	}
+	else if (Etatpartie == DEFAITE_NOIR){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+		printf("Les blancs ont gagné\n");
+	}
+	else if (Etatpartie == PARTIE_NULLE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+		printf("Partie nulle\n");
+	}
 	return 0;
 }
-
 //////////////////////////////////////////
 // Fonctions fournies:
 
@@ -172,3 +191,16 @@ bool estMajuscule (char c) {
 		return false;
 	}
 }
+
+void saisieCoup(char grille[N][N]){
+	  char depart[2], arrivee[2];
+  int coordDepart[2], coordArrivee[2], notation[2], coordonnees[2];
+  do {
+	printf("Allez c'est à vous !! Entrez les coordonnées du coup (du type : E5E7): ");
+	scanf("%2s", depart);
+	scanf("%2s", arrivee);
+  } while (!convertitEnCoordonnees(depart, coordDepart) || !convertitEnCoordonnees(arrivee, coordArrivee));
+ convertitEnCoordonnees(notation, coordonnees);
+ realiseCoupSiValide(grille,depart, arrivee) ;
+
+};
