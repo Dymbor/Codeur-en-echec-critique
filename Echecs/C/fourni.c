@@ -143,3 +143,32 @@ bool videGrille(char grille[N][N]) {
 	}
 }
 
+int couleurAdverse(int couleur){
+	if (couleur == C_BlANC) {
+		return C_NOIR;
+	}
+	else if (couleur == C_NOIR) {
+		return C_BLANC;
+	}
+}
+
+int trouveCouleur(const char grille[N][N], int ligne, int colonne){
+	if (estCaseVide(grille[N][N])) {
+		return C_VIDE;
+	}
+	else if (estMajuscule(grille[ligne][colonne])){
+		return C_BLANC;
+	}
+	else if (!estMajuscule(grille[ligne][colonne])) {
+		return C_NOIR;
+	}
+}
+
+bool estMajuscule (char c) {
+	if ('A' < c && 'Z' > c) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
