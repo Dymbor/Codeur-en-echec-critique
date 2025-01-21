@@ -178,17 +178,6 @@ int couleurAdverse(int couleur){
 	}
 }
 
-int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[N][N], ligne, colonne)) {
-		return C_VIDE;
-	}
-	else if (estMajuscule(grille[ligne][colonne])){
-		return C_BLANC;
-	}
-	else if (!estMajuscule(grille[ligne][colonne])) {
-		return C_NOIR;
-	}
-}
 
 bool estMajuscule (char c) {
 	if ('A' < c && 'Z' > c) {
@@ -200,6 +189,18 @@ bool estMajuscule (char c) {
 }
 
 //Fonctions Tom :
+
+int trouveCouleur(const char grille[N][N], int ligne, int colonne){
+	if (estCaseVide(grille[N][N], ligne, colonne)) {
+		return C_VIDE;
+	}
+	else if (estMajuscule(grille[ligne][colonne])){
+		return C_BLANC;
+	}
+	else if (!estMajuscule(grille[ligne][colonne])) {
+		return C_NOIR;
+	}
+}
 
 void saisieCoup(char grille[N][N]){
 	  char depart[2], arrivee[2];
@@ -253,7 +254,7 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 }
 
 void initialiseEchiquier(char grille[N][N]){
-	int i=0;
+
 	//pour la premiere ligne noir
 	grille[0][0]="t";
 	grille[0][1]="c";
@@ -264,7 +265,7 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[0][6]="c";
 	grille[0][7]="t";
 	//pour la ligne des pions noir
-	for(i=0;i<N,i++){
+	for (int i=0;i<N;i++){
 		grille[1][1]="p";
 	}
 
@@ -278,7 +279,7 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[7][6]="C";
 	grille[7][7]="T";
 	//pour la ligne des pions blanc
-	for(i=0;iN,i++){
+	for (int i=0;i<N;i++){
 		grille[6][i]="P";
 	}
 }
