@@ -356,8 +356,7 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 }
 
 void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
-	if (!estCaseVide(grille[N][N], depart[0], depart[1]) && estCaseVide(grille[N][N], arrivee[0], arrivee[1])) {
-		char temp = grille[depart[0]][depart[1]];
+	if (!estCaseVide(grille, depart[0], depart[1])) {
 		grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
 		grille[depart[0]][depart[1]] = CASE_VIDE;
 	}
@@ -365,9 +364,9 @@ void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
 }
 
 bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arrivee[2]) {
-	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille[N][N], depart[2], arrivee[2])) {
-		if (estCoupValide(grille[N][N], depart[2], arrivee[2])) {
-			realiseCoup(grille[N][N], depart[2], arrivee[2]);
+	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille, depart, arrivee)) {
+		if (estCoupValide(grille, depart, arrivee)) {
+			realiseCoup(grille, depart, arrivee);
 			return true;
 		}
 	}
