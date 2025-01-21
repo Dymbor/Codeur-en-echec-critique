@@ -90,24 +90,17 @@ int main(void)
 	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 	initialiseEchiquier(grille);
-	while (Etatpartie == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+	while (partieTerminee == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
 		afficheEchiquier (grille, num_coup, temps_debut);
 		saisieCoup(grille);
 		partieTerminee(grille, couleur);
 	}
 	afficheEchiquier(grille, num_coup, temps_debut);
-
-	if (Etatpartie == DEFAITE_BLANC){ 
-		printf("Les noirs ont gagné\n"); //nom de la fonction a modifier au bsn de la fonction partieTerminee
-	}
-	else if (Etatpartie == DEFAITE_NOIR){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
-		printf("Les blancs ont gagné\n");
-	}
-	else if (Etatpartie == PARTIE_NULLE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
-		printf("Partie nulle\n");
-	}
-	return 0;
+	printf("La partie est terminée.\n");
 }
+
+
+
 //////////////////////////////////////////
 // Fonctions fournies:
 
@@ -143,6 +136,8 @@ bool estDansGrille(int ligne, int colonne)
 	}
 }
 
+
+
 //////////////////////////////////////////
 void copieGrille(char copie[N][N], const char grille[N][N])
 {
@@ -175,7 +170,7 @@ void videGrille(char grille[N][N]) {
 
 
 int couleurAdverse(int couleur){
-	if (couleur == C_BlANC) {
+	if (couleur == C_BLANC) {
 		return C_NOIR;
 	}
 	else if (couleur == C_NOIR) {
@@ -183,8 +178,20 @@ int couleurAdverse(int couleur){
 	}
 }
 
+
+bool estMajuscule (char c) {
+	if ('A' <= c && 'Z' => c) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Fonctions Tom :
+
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[N][N])) {
+	if (estCaseVide(grille[ligne][colonne])) {
 		return C_VIDE;
 	}
 	else if (estMajuscule(grille[ligne][colonne])){
@@ -192,15 +199,6 @@ int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 	}
 	else if (!estMajuscule(grille[ligne][colonne])) {
 		return C_NOIR;
-	}
-}
-
-bool estMajuscule (char c) {
-	if ('A' < c && 'Z' > c) {
-		return true;
-	}
-	else {
-		return false;
 	}
 }
 
@@ -217,7 +215,19 @@ void saisieCoup(char grille[N][N]){
 
 };
 
-//////////////////////////////////////////
+ partieTerminee(const char grille[N][N], int couleur) {
+	 if ( estEnEchec == 0) { //à modifier avec estenechec pour la couleur adverse 
+		 return DEFAITE_BLANC;
+	 }
+	 else if (estEnEchec == 1) { //à modifier avec estenechec pour la couleur adverse
+		 return DEFAITE_NOIR;
+	 }
+	 else {
+		 return NON_TERMINEE;
+	 }
+ }
+
+
 // Fonctions Ethan:
 void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
 	effaceConsole();
@@ -244,7 +254,7 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 }
 
 void initialiseEchiquier(char grille[N][N]){
-	int i=0;
+
 	//pour la premiere ligne noir
 	grille[0][0]="t";
 	grille[0][1]="c";
@@ -255,7 +265,7 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[0][6]="c";
 	grille[0][7]="t";
 	//pour la ligne des pions noir
-	for(i=0;i<N,i++){
+	for (int i=0;i<N;i++){
 		grille[1][1]="p";
 	}
 
@@ -269,7 +279,7 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[7][6]="C";
 	grille[7][7]="T";
 	//pour la ligne des pions blanc
-	for(i=0;iN,i++){
+	for (int i=0;i<N;i++){
 		grille[6][i]="P";
 	}
 }
