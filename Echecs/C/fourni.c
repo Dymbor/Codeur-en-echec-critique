@@ -168,7 +168,7 @@ void videGrille(char grille[N][N]) {
 
 
 int couleurAdverse(int couleur){
-	if (couleur == C_BlANC) {
+	if (couleur == C_BLANC) {
 		return C_NOIR;
 	}
 	else if (couleur == C_NOIR) {
@@ -177,7 +177,7 @@ int couleurAdverse(int couleur){
 }
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[N][N])) {
+	if (estCaseVide(grille[N][N], ligne, colonne)) {
 		return C_VIDE;
 	}
 	else if (estMajuscule(grille[ligne][colonne])){
