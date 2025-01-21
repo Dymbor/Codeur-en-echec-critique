@@ -320,3 +320,12 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 		}
 	}
 }
+
+void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
+	if (!estCaseVide(grille[N][N], depart[0], depart[1]) && estCaseVide(grille[N][N], arrivee[0], arrivee[1])) {
+		char temp = grille[depart[0]][depart[1]];
+		grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
+		grille[depart[0]][depart[1]] = CASE_VIDE;
+	}
+	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant
+}
