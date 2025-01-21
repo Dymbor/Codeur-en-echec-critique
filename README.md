@@ -13,3 +13,6 @@ IV - Fonctions à implémenter
 	c) Gestion des couleurs, saisie d'un coup  
 	d) Implémentation du jeu d'échec  
 V - Listes des fonctionnalités en bonus  
+
+git config --global user.name "USERNAME"  
+git config --global user.email "EMAIL"  
