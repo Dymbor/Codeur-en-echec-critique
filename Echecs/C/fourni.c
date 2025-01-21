@@ -80,9 +80,11 @@ int partieTerminee(const char grille[N][N], int couleur);
 int listeDeplacementsValides(const char grille[N][N], const int depart[2], int deplacements[NB_MAX_DEPL][2]);
 
 
+
+// Main TOM
+
 int main(void)
-{
-	int Etatpartie = NON_TERMINEE;
+{ 
 	int num_coup = 0;
 	char grille[N][N];
 	int couleur = C_VIDE;
@@ -90,11 +92,12 @@ int main(void)
 	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 	initialiseEchiquier(grille);
-	while (partieTerminee == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+	do {
 		afficheEchiquier (grille, num_coup, temps_debut);
 		saisieCoup(grille);
 		partieTerminee(grille, couleur);
-	}
+	} while (partieTerminee == NON_TERMINEE);
+
 	afficheEchiquier(grille, num_coup, temps_debut);
 	printf("La partie est terminée.\n");
 }
@@ -213,14 +216,37 @@ void saisieCoup(char grille[N][N]){
  convertitEnCoordonnees(notation, coordonnees);
  realiseCoupSiValide(grille,depart, arrivee) ;
 
-};
+}
+
+bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
+	if (notation[0] >= 'A' && notation[0] <= 'H')
+	{
+		coordonnees[1] = 65- (int)notation[0];
+	}
+	if (notation[1] >= '1' && notation[1] <= '8')
+	{
+		coordonnees[0] = 8- (int)notation[1];
+	}
+	return estDansGrille(coordonnees[0], coordonnees[1]);
+}  
+ 
+bool estEnEchec(const char grille[N][N], int couleur) {
+	int positionRoi[2];
+	trouvePositionRoi(grille, positionRoi, couleur);
+
+
+
+}
 
  partieTerminee(const char grille[N][N], int couleur) {
-	 if ( estEnEchec == 0) { //à modifier avec estenechec pour la couleur adverse 
+	 if ( estEnEchec == 1) {
 		 return DEFAITE_BLANC;
 	 }
-	 else if (estEnEchec == 1) { //à modifier avec estenechec pour la couleur adverse
+	 else if (estEnEchec == 2) { 
 		 return DEFAITE_NOIR;
+	 }
+	 else if (estEnEchec == 3) {
+		 return PARTIE_NULLE;
 	 }
 	 else {
 		 return NON_TERMINEE;
