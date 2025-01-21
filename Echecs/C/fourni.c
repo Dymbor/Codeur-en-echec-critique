@@ -84,12 +84,11 @@ int main(void)
 {
 	int Etatpartie = NON_TERMINEE;
 	int num_coup = 0;
-	
 	char grille[N][N];
 	int couleur = C_VIDE;
 	char grille[N][N];
+	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
-
 	initialiseEchiquier(grille);
 	while (Etatpartie == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
 		afficheEchiquier (grille, num_coup, temps_debut);
@@ -144,6 +143,18 @@ bool estDansGrille(int ligne, int colonne)
 	}
 }
 
+//////////////////////////////////////////
+void copieGrille(char copie[N][N], const char grille[N][N])
+{
+	for(int i=0; i<N; i++)
+	{
+		for(int j=0; j<N; j++)
+		{
+			copie[i][j] = grille[i][j];
+		}
+  }
+}
+
 bool estCaseVide(const char grille[N][N], int ligne, int colonne){
 	if (grille[ligne][colonne] == CASE_VIDE) {
 		return true;
@@ -154,13 +165,14 @@ bool estCaseVide(const char grille[N][N], int ligne, int colonne){
 
 }
 
-bool videGrille(char grille[N][N]) {
+void videGrille(char grille[N][N]) {
 	for (int i=0; i < N; i++) {
 		for (int j=0; j < N; j++) {
 			grille[i][j] = CASE_VIDE;
 		}
 	}
 }
+
 
 int couleurAdverse(int couleur){
 	if (couleur == C_BlANC) {
