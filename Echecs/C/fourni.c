@@ -332,3 +332,15 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 		}
 	}
 }
+
+bool estDeplacementValide(const char grille[N][N], const int depart[2], const int arrivee[2])
+{
+	if(grille[arrivee[0]][arrivee[1]]-grille[depart[0]][depart[1]] == listeDeplacementsValides(grille[N][N], depart[2], arrivee[2]))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
