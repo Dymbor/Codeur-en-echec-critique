@@ -191,7 +191,7 @@ int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 }
 
 bool estMajuscule (char c) {
-	if ('A' < c && 'Z' > c) {
+	if ('A' <= c && 'Z' => c) {
 		return true;
 	}
 	else {
