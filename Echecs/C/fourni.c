@@ -255,7 +255,7 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[0][6]="c";
 	grille[0][7]="t";
 	//pour la ligne des pions noir
-	for(i=0;i<N,i++);{
+	for(i=0;i<N,i++){
 		grille[1][1]="p";
 	}
 
