@@ -183,8 +183,7 @@ int couleurAdverse(int couleur){
 
 
 bool estMajuscule (char c) {
-	
-	if ('A' <= c && 'Z' >=  c) {
+	if ('A' <= c && 'Z' >= c) {
 		return true;
 	}
 	else {
@@ -220,6 +219,18 @@ void saisieCoup(char grille[N][N]){
 
 }
 
+bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
+	if (notation[0] >= 'A' && notation[0] <= 'H')
+	{
+		coordonnees[1] = 65- (int)notation[0];
+	}
+	if (notation[1] >= '1' && notation[1] <= '8')
+	{
+		coordonnees[0] = 8- (int)notation[1];
+	}
+	return estDansGrille(coordonnees[0], coordonnees[1]);
+}  
+ 
 bool estEnEchec(const char grille[N][N], int couleur) {
 	
 	int positionRoi[2];
@@ -342,4 +353,13 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 			}
 		}
 	}
+}
+
+void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
+	if (!estCaseVide(grille[N][N], depart[0], depart[1]) && estCaseVide(grille[N][N], arrivee[0], arrivee[1])) {
+		char temp = grille[depart[0]][depart[1]];
+		grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
+		grille[depart[0]][depart[1]] = CASE_VIDE;
+	}
+	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant
 }
