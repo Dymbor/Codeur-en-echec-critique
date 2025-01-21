@@ -332,3 +332,19 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 		}
 	}
 }
+
+bool estCoupValide(const char grille[N][N], const int depart[2], const int arrivee[2]){
+	if(estCaseVide(grille, arrivee[0], arrivee[1])){
+		return false;
+	}
+	else{
+		copieGrille(copie[N][N], grille[N][N]);
+		realiseCoup(copie[N][N],depart[2], arrivee[2]);
+		if(estEnEchec(copie[N][N], trouveCouleur(copie[N][N], positionRoi[0],positionRoi[1]))){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+}
