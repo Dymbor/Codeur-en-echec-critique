@@ -94,9 +94,9 @@ int main(void)
 	initialiseEchiquier(grille);
 	do {
 		afficheEchiquier (grille, num_coup, temps_debut);
+		printf("A vous de jouer Joueur : %s\n", couleur == C_BLANC ? "blanc" : "noir"); //condition ternaire (Merci Livio)
 		saisieCoup(grille);
-		partieTerminee(grille, couleur);
-	} while (partieTerminee == NON_TERMINEE);
+	} while (partieTerminee(grille, couleur) == NON_TERMINEE);
 
 	afficheEchiquier(grille, num_coup, temps_debut);
 	printf("La partie est terminée.\n");
@@ -194,13 +194,14 @@ bool estMajuscule (char c) {
 //Fonctions Tom :
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[ligne][colonne])) {
+	char c = ' ';
+	if (estCaseVide(grille, ligne, colonne)) {
 		return C_VIDE;
 	}
-	else if (estMajuscule(grille[ligne][colonne])){
+	else if (estMajuscule(c)) {
 		return C_BLANC;
 	}
-	else if (!estMajuscule(grille[ligne][colonne])) {
+	else if (!estMajuscule(c)) {
 		return C_NOIR;
 	}
 }
@@ -231,21 +232,42 @@ bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
 }  
  
 bool estEnEchec(const char grille[N][N], int couleur) {
+	
 	int positionRoi[2];
+	int ligne = positionRoi[0];
+	int colonne = positionRoi[1];
+	int depart[2], arrivee[2];
+
 	trouvePositionRoi(grille, positionRoi, couleur);
+	trouveCouleur(grille, ligne, colonne);
+	couleurAdverse(couleur);
+	estDeplacementValide(grille, depart, arrivee);
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			if (trouveCouleur(grille, i, j) == couleurAdverse(couleur) && estDeplacementValide(grille, depart, arrivee)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
 
 
 
 }
 
- partieTerminee(const char grille[N][N], int couleur) {
+ int partieTerminee(const char grille[N][N], int couleur) {
 	 if ( estEnEchec == 1) {
+		printf("Le joueur noir a gagné !\n");
 		 return DEFAITE_BLANC;
 	 }
 	 else if (estEnEchec == 2) { 
+		printf("Le joueur blanc a gagné !\n");
 		 return DEFAITE_NOIR;
 	 }
 	 else if (estEnEchec == 3) {
+		printf("La partie nulle ! :( \n");
 		 return PARTIE_NULLE;
 	 }
 	 else {
