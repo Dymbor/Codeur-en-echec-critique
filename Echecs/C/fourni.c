@@ -136,6 +136,8 @@ bool estDansGrille(int ligne, int colonne)
 	}
 }
 
+
+
 //////////////////////////////////////////
 void copieGrille(char copie[N][N], const char grille[N][N])
 {
@@ -196,6 +198,8 @@ bool estMajuscule (char c) {
 		return false;
 	}
 }
+
+//Fonctions Tom :
 
 void saisieCoup(char grille[N][N]){
 	  char depart[2], arrivee[2];
