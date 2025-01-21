@@ -260,14 +260,14 @@ void initialiseEchiquier(char grille[N][N]){
 	}
 
 	//pour la premiere ligne blanc
-	grille[7][0]="t";
-	grille[7][1]="c";
-	grille[7][2]="f";
-	grille[7][3]="d";
-	grille[7][4]="r";
-	grille[7][5]="f";
-	grille[7][6]="c";
-	grille[7][7]="t";
+	grille[7][0]="T";
+	grille[7][1]="C";
+	grille[7][2]="F";
+	grille[7][3]="D";
+	grille[7][4]="R";
+	grille[7][5]="F";
+	grille[7][6]="C";
+	grille[7][7]="T";
 	//pour la ligne des pions blanc
 	for(i=0;iN,i++){
 		grille[6][i]="P";
