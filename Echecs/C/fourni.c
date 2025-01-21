@@ -189,7 +189,7 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 		printf("Tour du joueur: blanc\n");
 	}
 	else{
-		printf("Tour du joueur: noir\n");
+		printf("Tour du joueur: noir\n");}
 
 	printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
 	
@@ -203,4 +203,4 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 	}
 	printf("+---+---+---+---+---+---+---+---+\n");
 	printf("  A\tB\tC\tD\tE\tF\tG\tH\n");
-}}
+}
