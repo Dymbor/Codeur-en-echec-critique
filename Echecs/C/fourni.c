@@ -90,24 +90,17 @@ int main(void)
 	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 	initialiseEchiquier(grille);
-	while (Etatpartie == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
+	while (partieTerminee == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
 		afficheEchiquier (grille, num_coup, temps_debut);
 		saisieCoup(grille);
 		partieTerminee(grille, couleur);
 	}
 	afficheEchiquier(grille, num_coup, temps_debut);
-
-	if (Etatpartie == DEFAITE_BLANC){ 
-		printf("Les noirs ont gagné\n"); //nom de la fonction a modifier au bsn de la fonction partieTerminee
-	}
-	else if (Etatpartie == DEFAITE_NOIR){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
-		printf("Les blancs ont gagné\n");
-	}
-	else if (Etatpartie == PARTIE_NULLE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
-		printf("Partie nulle\n");
-	}
-	return 0;
+	printf("La partie est terminée.\n");
 }
+
+
+
 //////////////////////////////////////////
 // Fonctions fournies:
 
@@ -217,7 +210,19 @@ void saisieCoup(char grille[N][N]){
 
 };
 
-//////////////////////////////////////////
+ partieTerminee(const char grille[N][N], int couleur) {
+	 if ( estEnEchec == 0) { //à modifier avec estenechec pour la couleur adverse 
+		 return DEFAITE_BLANC;
+	 }
+	 else if (estEnEchec == 1) { //à modifier avec estenechec pour la couleur adverse
+		 return DEFAITE_NOIR;
+	 }
+	 else {
+		 return NON_TERMINEE;
+	 }
+ }
+
+
 // Fonctions Ethan:
 void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
 	effaceConsole();
