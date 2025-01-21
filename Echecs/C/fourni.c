@@ -242,3 +242,34 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 	printf("\t+---+---+---+---+---+---+---+---+\n");
 	printf("      A   B   C   D   E   F   G   H\n");
 }
+
+void initialiseEchiquier(char grille[N][N]){
+	int i=0;
+	//pour la premiere ligne noir
+	grille[0][0]="t";
+	grille[0][1]="c";
+	grille[0][2]="f";
+	grille[0][3]="d";
+	grille[0][4]="r";
+	grille[0][5]="f";
+	grille[0][6]="c";
+	grille[0][7]="t";
+	//pour la ligne des pions noir
+	for(i=0;i<N,i++);{
+		grille[1][1]="p";
+	}
+
+	//pour la premiere ligne blanc
+	grille[7][0]="t";
+	grille[7][1]="c";
+	grille[7][2]="f";
+	grille[7][3]="d";
+	grille[7][4]="r";
+	grille[7][5]="f";
+	grille[7][6]="c";
+	grille[7][7]="t";
+	//pour la ligne des pions blanc
+	for(i=0;iN,i++){
+		grille[6][i]
+	}
+}
