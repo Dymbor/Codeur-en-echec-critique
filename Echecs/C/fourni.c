@@ -194,7 +194,7 @@ bool estMajuscule (char c) {
 //Fonctions Tom :
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[N][N], ligne, colonne)) {
+	if (estCaseVide(grille[ligne][colonne])) {
 		return C_VIDE;
 	}
 	else if (estMajuscule(grille[ligne][colonne])){
