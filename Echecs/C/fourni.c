@@ -196,7 +196,9 @@ bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
 	{
 		coordonnees[1] = 65- (int)notation[0];
 	}
+	if (notation[0] >= '1' && notation[0] <= '8')
+	{
 	coordonnees[0] = 8- (int)notation[1];
-	
+	}
 	return estDansGrille(coordonnees[1], coordonnees[0]);
 }
