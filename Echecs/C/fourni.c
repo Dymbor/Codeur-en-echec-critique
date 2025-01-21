@@ -88,6 +88,7 @@ int main(void)
 	char grille[N][N];
 	int couleur = C_VIDE;
 	char grille[N][N];
+	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 
 	initialiseEchiquier(grille);
@@ -145,6 +146,18 @@ bool estDansGrille(int ligne, int colonne)
 	else {
 		return false;
 	}
+}
+
+//////////////////////////////////////////
+void copieGrille(char copie[N][N], const char grille[N][N])
+{
+	for(int i=0; i<N; i++)
+	{
+		for(int j=0; j<N; j++)
+		{
+			copie[i][j] = grille[i][j];
+		}
+  }
 }
 
 bool estCaseVide(const char grille[N][N], int ligne, int colonne){
