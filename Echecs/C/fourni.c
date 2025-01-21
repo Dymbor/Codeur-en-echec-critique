@@ -193,14 +193,14 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 
 	printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
 	
-	printf("+---+---+---+---+---+---+---+---+\n");
+	printf("\t+---+---+---+---+---+---+---+---+\n");
 	for (int i = 0; i < N; i++) {
-		printf("%d|", i+1);
+		printf("%d\t|", 8-i+1);
 		for (int j = 0; j < N; j++) {
 			afficheCaseEnCouleur(grille[i][j], C_VIDE);
 		}
 		printf("|\n");
 	}
-	printf("+---+---+---+---+---+---+---+---+\n");
-	printf("  A\tB\tC\tD\tE\tF\tG\tH\n");
+	printf("\t+---+---+---+---+---+---+---+---+\n");
+	printf("      A   B   C   D   E   F   G   H\n");
 }
