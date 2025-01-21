@@ -329,3 +329,15 @@ void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
 	}
 	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant
 }
+
+bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arrivee[2]) {
+	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille[N][N], depart[2], arrivee[2])) {
+		if (estCoupValide(grille[N][N], depart[2], arrivee[2])) {
+			realiseCoup(grille[N][N], depart[2], arrivee[2]);
+			return true;
+		}
+	}
+	else {
+		return false;
+	}
+}
