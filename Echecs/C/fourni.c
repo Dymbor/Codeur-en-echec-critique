@@ -180,7 +180,7 @@ int couleurAdverse(int couleur){
 
 
 bool estMajuscule (char c) {
-	if ('A' < c && 'Z' > c) {
+	if ('A' <= c && 'Z' => c) {
 		return true;
 	}
 	else {
