@@ -228,7 +228,7 @@ bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
 		coordonnees[0] = 8- (int)notation[1];
 	}
 	return estDansGrille(coordonnees[0], coordonnees[1]);
-  
+}  
  
 bool estEnEchec(const char grille[N][N], int couleur) {
 	int positionRoi[2];
