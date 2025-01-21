@@ -313,7 +313,7 @@ void initialiseEchiquier(char grille[N][N]){
 void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur){
 	if(couleur==C_BLANC){
 		for(int i=0;i<N;i++){
-			for(int j=0;j<N,j++){
+			for(int j=0;j<N;j++){
 				if (grille[i][j]=="R"){
 					positionRoi[0]=i;
 					positionRoi[1]=j;
@@ -323,7 +323,7 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 	}
 	else{
 		for(int i=0;i<N;i++){
-			for(int j=0;j<N,j++){
+			for(int j=0;j<N;j++){
 				if(grille[i][j]=="r"){
 					positionRoi[0]=i;
 					positionRoi[1]=j;
