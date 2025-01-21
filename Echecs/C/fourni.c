@@ -270,6 +270,6 @@ void initialiseEchiquier(char grille[N][N]){
 	grille[7][7]="t";
 	//pour la ligne des pions blanc
 	for(i=0;iN,i++){
-		grille[6][i]
+		grille[6][i]="P";
 	}
 }
