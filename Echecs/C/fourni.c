@@ -203,4 +203,4 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 	}
 	printf("+---+---+---+---+---+---+---+---+\n");
 	printf("  A\tB\tC\tD\tE\tF\tG\tH\n");
-}
+}}
