@@ -84,13 +84,11 @@ int main(void)
 {
 	int Etatpartie = NON_TERMINEE;
 	int num_coup = 0;
-	
 	char grille[N][N];
 	int couleur = C_VIDE;
 	char grille[N][N];
 	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
-
 	initialiseEchiquier(grille);
 	while (Etatpartie == NON_TERMINEE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
 		afficheEchiquier (grille, num_coup, temps_debut);
@@ -108,11 +106,8 @@ int main(void)
 	else if (Etatpartie == PARTIE_NULLE){ //nom de la fonction a modifier au bsn de la fonction partieTerminee
 		printf("Partie nulle\n");
 	}
-	
-	
 	return 0;
 }
-
 //////////////////////////////////////////
 // Fonctions fournies:
 
@@ -175,6 +170,37 @@ void videGrille(char grille[N][N]) {
 		for (int j=0; j < N; j++) {
 			grille[i][j] = CASE_VIDE;
 		}
+	}
+}
+
+
+int couleurAdverse(int couleur){
+	if (couleur == C_BlANC) {
+		return C_NOIR;
+	}
+	else if (couleur == C_NOIR) {
+		return C_BLANC;
+	}
+}
+
+int trouveCouleur(const char grille[N][N], int ligne, int colonne){
+	if (estCaseVide(grille[N][N])) {
+		return C_VIDE;
+	}
+	else if (estMajuscule(grille[ligne][colonne])){
+		return C_BLANC;
+	}
+	else if (!estMajuscule(grille[ligne][colonne])) {
+		return C_NOIR;
+	}
+}
+
+bool estMajuscule (char c) {
+	if ('A' < c && 'Z' > c) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
