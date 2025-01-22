@@ -177,6 +177,7 @@ int couleurAdverse(int couleur){
 	else if (couleur == C_NOIR) {
 		return C_BLANC;
 	}
+	return C_VIDE;
 }
 
 
@@ -192,15 +193,13 @@ bool estMajuscule (char c) {
 
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille, ligne, colonne)) {
-		return C_VIDE;
-	}
-	else if (estMajuscule(grille[ligne][colonne])){
+	if (estMajuscule(grille[ligne][colonne])){
 		return C_BLANC;
 	}
 	else if (!estMajuscule(grille[ligne][colonne])) {
 		return C_NOIR;
 	}
+	return C_VIDE;
 }
 
 void saisieCoup(char grille[N][N]){
@@ -215,12 +214,8 @@ void saisieCoup(char grille[N][N]){
 
 }
 
-bool estEnEchec(const char grille[N][N], int couleur) {
-	int positionRoi[2];
-	trouvePositionRoi(grille, positionRoi, couleur);
-}
-
 int partieTerminee(const char grille[N][N], int couleur) {
+	//LA FONCTION EST FAUSSE, estEnEchec renvoie un Booleen REFAIRE !!!!
 	 if (estEnEchec(grille, couleur) == 1) {
 		 return DEFAITE_BLANC;
 	 }
