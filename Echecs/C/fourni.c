@@ -166,15 +166,8 @@ int couleurAdverse(int couleur){
 
 
 bool estMajuscule (char c) {
-	if ('A' <= c && 'Z' >= c) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return 'A' <= c && 'Z' >= c;
 }
-
-
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 	if (estMajuscule(grille[ligne][colonne])){
