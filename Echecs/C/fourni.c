@@ -283,14 +283,14 @@ bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arriv
 }
 
 bool estCoupValide(const char grille[N][N], const int depart[2], const int arrivee[2]){
-	if(estCaseVide(grille, arrivee[0], arrivee[1])){
+	if(estCaseVide(grille, depart[0], depart[1])){
 		return false;
 	}
 	else{
-		char copie[N][N] = {0};
+		char copie[N][N];
 		copieGrille(copie, grille);
-		realiseCoup(copie ,depart, arrivee);
-		if(estEnEchec(copie, trouveCouleur(copie, arrivee[0], arrivee[1]))){
+		realiseCoup(copie, depart, arrivee);
+		if(estEnEchec(copie, trouveCouleur(grille, depart[0], depart[1]))){
 			return false;
 		}
 		else{
