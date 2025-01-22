@@ -127,38 +127,22 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 		printf("\e[1;%dm%c\e[0m", couleurChar+91, c);
 	}
 }
+
+
 bool estDansGrille(int ligne, int colonne){
-	scanf("%d%d", &ligne, &colonne);
-	if (ligne >= 0 && ligne < N && colonne >= 0 && colonne < N) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return ligne >= 0 && ligne < N && colonne >= 0 && colonne < N;
 }
 
-
-
-//////////////////////////////////////////
-void copieGrille(char copie[N][N], const char grille[N][N])
-{
-	for(int i=0; i<N; i++)
-	{
-		for(int j=0; j<N; j++)
-		{
+void copieGrille(char copie[N][N], const char grille[N][N]){
+	for(int i=0; i<N; i++){
+		for(int j=0; j<N; j++){
 			copie[i][j] = grille[i][j];
 		}
   }
 }
 
 bool estCaseVide(const char grille[N][N], int ligne, int colonne){
-	if (grille[ligne][colonne] == CASE_VIDE) {
-		return true;
-	}
-	else {
-		return false;
-	}
-
+	return grille[ligne][colonne] == CASE_VIDE;
 }
 
 void videGrille(char grille[N][N]) {
@@ -203,6 +187,7 @@ int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 }
 
 void saisieCoup(char grille[N][N]){
+	//LA FONCTION SAISIE EST FAUSSE, A REFAIRE !! (possibilité avec fgets)
 	char depart[2], arrivee[2];
   	int coordDepart[2], coordArrivee[2];
   	do {
@@ -280,11 +265,11 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
     if (notation[0] >= 'A' && notation[0] <= 'H')
     {
-        coordonnees[0] = 65- (int) notation[0];
+        coordonnees[1] = 65- (int) notation[0];
     }
     if (notation[1]>= '1' && notation[1] <= '8') {
-		coordonnees[1] = '8' - notation[1];
-	}
+	coordonnees[0] = '8' - notation[1];
+    }
     return estDansGrille(coordonnees[0], coordonnees[1]);
 }
 
@@ -297,11 +282,9 @@ void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
 }
 
 bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arrivee[2]) {
-	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille, depart, arrivee)) {
-		if (estCoupValide(grille, depart, arrivee)) {
-			realiseCoup(grille, depart, arrivee);
-			return true;
-		}
+	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille, depart, arrivee) && estCoupValide(grille, depart, arrivee)) {
+		realiseCoup(grille, depart, arrivee);
+		return true;
 	}
 	return false;
 }
