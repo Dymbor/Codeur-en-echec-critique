@@ -88,7 +88,6 @@ int main(void)
 	int num_coup = 0;
 	char grille[N][N];
 	int couleur = C_VIDE;
-	char grille[N][N];
 	char copie[N][N];
 	const size_t temps_debut = time(NULL); // temps de départ
 	initialiseEchiquier(grille);
@@ -128,8 +127,7 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 		printf("\e[1;%dm%c\e[0m", couleurChar+91, c);
 	}
 }
-bool estDansGrille(int ligne, int colonne)
-{
+bool estDansGrille(int ligne, int colonne){
 	scanf("%d%d", &ligne, &colonne);
 	if (ligne >= 0 && ligne < N && colonne >= 0 && colonne < N) {
 		return true;
@@ -183,7 +181,7 @@ int couleurAdverse(int couleur){
 
 
 bool estMajuscule (char c) {
-	if ('A' <= c && 'Z' => c) {
+	if ('A' <= c && 'Z' >= c) {
 		return true;
 	}
 	else {
@@ -191,10 +189,10 @@ bool estMajuscule (char c) {
 	}
 }
 
-//Fonctions Tom :
+
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estCaseVide(grille[ligne][colonne])) {
+	if (estCaseVide(grille, ligne, colonne)) {
 		return C_VIDE;
 	}
 	else if (estMajuscule(grille[ligne][colonne])){
@@ -206,34 +204,30 @@ int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 }
 
 void saisieCoup(char grille[N][N]){
-	  char depart[2], arrivee[2];
-  int coordDepart[2], coordArrivee[2], notation[2], coordonnees[2];
-  do {
-	printf("Allez c'est à vous !! Entrez les coordonnées du coup (du type : E5E7): ");
-	scanf("%2s", depart);
-	scanf("%2s", arrivee);
-  } while (!convertitEnCoordonnees(depart, coordDepart) || !convertitEnCoordonnees(arrivee, coordArrivee));
- convertitEnCoordonnees(notation, coordonnees);
- realiseCoupSiValide(grille,depart, arrivee) ;
+	char depart[2], arrivee[2];
+  	int coordDepart[2], coordArrivee[2];
+  	do {
+		printf("Allez c'est à vous !! Entrez les coordonnées du coup (du type : E5E7): ");
+		scanf("%2s", depart);
+		scanf("%2s", arrivee);
+  	} while (!convertitEnCoordonnees(depart, coordDepart) || !convertitEnCoordonnees(arrivee, coordArrivee));
+	realiseCoupSiValide(grille, coordDepart, coordArrivee) ;
 
 }
 
 bool estEnEchec(const char grille[N][N], int couleur) {
 	int positionRoi[2];
 	trouvePositionRoi(grille, positionRoi, couleur);
-
-
-
 }
 
- partieTerminee(const char grille[N][N], int couleur) {
-	 if ( estEnEchec == 1) {
+int partieTerminee(const char grille[N][N], int couleur) {
+	 if (estEnEchec(grille, couleur) == 1) {
 		 return DEFAITE_BLANC;
 	 }
-	 else if (estEnEchec == 2) { 
+	 else if (estEnEchec(grille, couleur) == 2) { 
 		 return DEFAITE_NOIR;
 	 }
-	 else if (estEnEchec == 3) {
+	 else if (estEnEchec(grille, couleur) == 3) {
 		 return PARTIE_NULLE;
 	 }
 	 else {
@@ -262,63 +256,41 @@ void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut)
 			afficheCaseEnCouleur(grille[i][j], C_VIDE);
 		}
 		printf("|\n");
+		printf("\t+---+---+---+---+---+---+---+---+\n");
 	}
-	printf("\t+---+---+---+---+---+---+---+---+\n");
 	printf("      A   B   C   D   E   F   G   H\n");
 }
 
-void initialiseEchiquier(char grille[N][N]){
 
-	//pour la premiere ligne noir
-	grille[0][0]="t";
-	grille[0][1]="c";
-	grille[0][2]="f";
-	grille[0][3]="d";
-	grille[0][4]="r";
-	grille[0][5]="f";
-	grille[0][6]="c";
-	grille[0][7]="t";
-	//pour la ligne des pions noir
-	for (int i=0;i<N;i++){
-		grille[1][1]="p";
-	}
-
-	//pour la premiere ligne blanc
-	grille[7][0]="T";
-	grille[7][1]="C";
-	grille[7][2]="F";
-	grille[7][3]="D";
-	grille[7][4]="R";
-	grille[7][5]="F";
-	grille[7][6]="C";
-	grille[7][7]="T";
-	//pour la ligne des pions blanc
-	for (int i=0;i<N;i++){
-		grille[6][i]="P";
+void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur){
+	for (int i=0; i<N; i++){
+		for (int j=0; j<N; j++){
+			if (couleur == C_BLANC){
+				if (grille[i][j]=='R'){
+					positionRoi[0]=i;
+					positionRoi[1]=j;
+				}
+			}
+			else{
+				if (grille[i][j] == 'r'){
+					positionRoi[0]=i;
+					positionRoi[1]=j;
+				}
+			}
+		}
 	}
 }
 
-void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur){
-	if(couleur==C_BLANC){
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N,j++){
-				if (grille[i][j]=="R"){
-					positionRoi[0]=i;
-					positionRoi[1]=j;
-				}
-			}
-		}
+
+bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
+    if (notation[0] >= 'A' && notation[0] <= 'H')
+    {
+        coordonnees[0] = 65- (int) notation[0];
+    }
+    if (notation[1]>= '1' && notation[1] <= '8') {
+		coordonnees[1] = '8' - notation[1];
 	}
-	else{
-		for(int i=0;i<N;i++){
-			for(int j=0;j<N,j++){
-				if(grille[i][j]=="r"){
-					positionRoi[0]=i;
-					positionRoi[1]=j;
-				}
-			}
-		}
-	}
+    return estDansGrille(coordonnees[0], coordonnees[1]);
 }
 
 void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
@@ -336,7 +308,42 @@ bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arriv
 			return true;
 		}
 	}
-	else {
+	return false;
+}
+
+bool estCoupValide(const char grille[N][N], const int depart[2], const int arrivee[2]){
+	if(estCaseVide(grille, arrivee[0], arrivee[1])){
 		return false;
+	}
+	else{
+		char copie[N][N] = {0};
+		copieGrille(copie, grille);
+		realiseCoup(copie ,depart, arrivee);
+		if(estEnEchec(copie, trouveCouleur(copie, arrivee[0], arrivee[1]))){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+}
+
+void initialiseEchiquier(char grille[N][N]){
+	//pour la premiere ligne noir et blanc
+	char P_BLANC[] = {'T','C','F','D','R','F','C','T'};
+	char P_NOIR[] = {'t','c','f','d','r','f','c','t'};
+	for(int i=0;i<N;i++){
+		grille[0][i] = P_NOIR[i];
+		grille[7][i] = P_BLANC[i];
+	}
+
+	//pour la ligne des pions noir
+	for (int i=0;i<N;i++){
+		grille[1][i]='p';
+	}
+
+	//pour la ligne des pions blanc
+	for (int i=0;i<N;i++){
+		grille[6][i]='P';
 	}
 }
