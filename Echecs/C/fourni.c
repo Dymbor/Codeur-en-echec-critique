@@ -233,27 +233,27 @@ int partieTerminee(const char grille[N][N], int couleur) {
 
 // Fonctions Ethan:
 void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
-	effaceConsole();
+    effaceConsole();
 
-	printf("Coup n°%d\n", num_coup); //défini quel joueur doit jouer
-	if(num_coup % 2 != 0){
-		printf("Tour du joueur: blanc\n");
-	}
-	else{
-		printf("Tour du joueur: noir\n");}
+    printf("Coup n°%d\n", num_coup); //défini quel joueur doit jouer
+    if(num_coup % 2 != 0){
+        printf("Tour du joueur: blanc\n");
+    }
+    else{
+        printf("Tour du joueur: noir\n");}
 
-	printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
-	
-	printf("\t+---+---+---+---+---+---+---+---+\n");
-	for (int i = 0; i < N; i++) {
-		printf("%d\t|", 8-i+1);
-		for (int j = 0; j < N; j++) {
-			afficheCaseEnCouleur(grille[i][j], C_VIDE);
-		}
-		printf("|\n");
-		printf("\t+---+---+---+---+---+---+---+---+\n");
-	}
-	printf("      A   B   C   D   E   F   G   H\n");
+    printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
+    
+    printf("   +---+---+---+---+---+---+---+---+\n");
+    for (int i = 0; i < N; i++) {
+        printf(" %d | ", 8-i);
+        for (int j = 0; j < N; j++) {
+            afficheCaseEnCouleur(grille[i][j], C_VIDE);
+            printf(" | ");
+        }
+        printf("\n   +---+---+---+---+---+---+---+---+\n");
+    }
+    printf("     A   B   C   D   E   F   G   H\n");
 }
 
 
@@ -325,6 +325,7 @@ bool estCoupValide(const char grille[N][N], const int depart[2], const int arriv
 
 void initialiseEchiquier(char grille[N][N]){
 	//pour la premiere ligne noir et blanc
+	videGrille(grille);
 	char P_BLANC[] = {'T','C','F','D','R','F','C','T'};
 	char P_NOIR[] = {'t','c','f','d','r','f','c','t'};
 	for(int i=0;i<N;i++){
