@@ -335,12 +335,188 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 
 bool estDeplacementValide(const char grille[N][N], const int depart[2], const int arrivee[2])
 {
-	if(grille[arrivee[0]][arrivee[1]]-grille[depart[0]][depart[1]] == listeDeplacementsValides(grille[N][N], depart[2], arrivee[2]))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    int deplacements[NB_MAX_DEPL][2];
+    int colonneArriveeDemande = arrivee[0];
+    int ligneArriveeDemande = arrivee[1];
+    listeDeplacementsValides(grille, depart[2], deplacements);
+    for (int i = 0; i < NB_MAX_DEPL; i++)
+    {
+        if(colonneArriveeDemande== deplacements[i][0] && ligneArriveeDemande== deplacements[i][1])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+int listeDeplacementsValides(const char grille[N][N], const int depart[2], int deplacements[NB_MAX_DEPL][2])
+{
+    char piece = grille[depart[0]][depart[1]];
+    int j = 0;
+    if (piece == 'T' || piece == 't') //Déplacement Tour
+    {
+        int directions[4][2] = {
+            {1, 0},
+            {0, 1}, {0, -1},
+            {-1, 0}
+        };
+
+        for (int i = 0; i < 4; i++)
+        {
+            int colonneArrive = depart[0];
+            int ligneArrive = depart[1];
+            while (grille[ligneArrive][colonneArrive] == CASE_VIDE)
+            {
+                ligneArrive += directions[i][0];
+                colonneArrive += directions[i][1];
+
+                if (estDansGrille(ligneArrive, colonneArrive))
+                {
+                    deplacements[j][0] = directions[i][0];
+                    deplacements[j][1] = directions[i][1];
+                    j++;
+                }
+            };
+
+            int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+
+            if (couleur_arrivee != couleur_depart && estDansGrille(ligneArrive, colonneArrive))
+            {
+                deplacements[j][0] = directions[i][0];
+                deplacements[j][1] = directions[i][1];
+                j++;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'C' || piece == 'c') //Déplacement Cavalier
+    {
+        int moves[8][2] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+        for (int i = 0; i < 8; i++)
+        {
+            int ligneArrive = depart[0] + moves[i][0];
+            int colonneArrive = depart[1] + moves[i][1];
+            int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+            if (estDansGrille(ligneArrive, colonneArrive) && couleur_depart != couleur_arrivee)
+            {
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                j++;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'F' || piece == 'f') //Déplacement Fou
+    {
+        int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int d = 0; d < 4; d++)
+        {
+            for (int i = 1; i < N; i++)
+            {
+                int ligneArrive = depart[0] + i * directions[d][0];
+                int colonneArrive = depart[1] + i * directions[d][1];
+                int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+                int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+                if (!estDansGrille(ligneArrive, colonneArrive)) break;
+                if (couleur_depart == couleur_arrivee) break;
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                j++;
+                if (couleur_arrivee != C_VIDE) break;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'D' || piece == 'd') //Déplacement Dame
+    {
+        int directions[8][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int d = 0; d < 8; d++)
+        {
+            for (int i = 1; i < N; i++)
+            {
+                int ligneArrive = depart[0] + i * directions[d][0];
+                int colonneArrive = depart[1] + i * directions[d][1];
+                int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+                int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+                if (!estDansGrille(ligneArrive, colonneArrive)) break;
+
+                if (couleur_arrivee == couleur_depart) break;
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                j++;
+                if (couleur_arrivee != C_VIDE) break;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'R' || piece == 'r') //Déplacement Roi
+    {
+        int deplacement[8][2] = {
+            {1, 1}, {1, 0}, {1, -1},
+            {0, 1}, {0, -1},
+            {-1, 1}, {-1, 0}, {-1, -1}
+        };
+
+        for (int i = 0; i < N; i++)
+        {
+            int ligneArrive = depart[0] + deplacement[i][0];
+            int colonneArrive = depart[1] + deplacement[i][1];
+            int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+
+            if (estDansGrille(ligneArrive, colonneArrive))
+            {
+                if (couleur_depart != couleur_arrivee)
+                {
+                    deplacements[j][0] = deplacement[i][0];
+                    deplacements[j][1] = deplacement[i][1];
+                    j++;
+                }
+            }
+        }
+        return j;
+    }
+    else if (piece == 'P' || piece == 'p') //Déplacement Pion
+    {
+        {
+            int direction = (piece == 'P') ? -1 : 1;//(condition ? valeur si vrai : valeur si faux)
+            int startRow = (piece == 'P') ? 6 : 1;
+            int ligneArrive = depart[0] + direction;
+            if (estDansGrille(ligneArrive, depart[1]) && estCaseVide(grille, ligneArrive, depart[1]))
+            {
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = depart[1];
+                j++;
+                if (depart[0] == startRow && estCaseVide(grille, ligneArrive + direction, depart[1]))
+                {
+                    deplacements[j][0] = ligneArrive + direction;
+                    deplacements[j][1] = depart[1];
+                    j++;
+                }
+            }
+            int captures[2][2] = {{ligneArrive, depart[1] - 1}, {ligneArrive, depart[1] + 1}};
+            // les 2 diagonales où le pion peut manger contrairement aux autres pièces
+            for (int i = 0; i < 2; i++)
+            {
+                if (estDansGrille(captures[i][0], captures[i][1]) &&
+                    trouveCouleur(grille, captures[i][0], captures[i][1]) == couleurAdverse(
+                        trouveCouleur(grille, depart[0], depart[1])))
+                {
+                    deplacements[j][0] = captures[i][0];
+                    deplacements[j][1] = captures[i][1];
+                    j++;
+                }
+            }
+        }
+        return j;
+    }
+    else if (piece == CASE_VIDE) //Case depart vide
+    {
+        return 0;
+    }
 }
