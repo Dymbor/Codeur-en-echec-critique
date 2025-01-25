@@ -95,10 +95,12 @@ int main(void)
 		afficheEchiquier (grille, num_coup, temps_debut);
 		saisieCoup(grille);
 		partieTerminee(grille, couleur);
-	} while (partieTerminee == NON_TERMINEE);
+	} while (partieTerminee(grille, couleur) == NON_TERMINEE);
 
 	afficheEchiquier(grille, num_coup, temps_debut);
 	printf("La partie est terminée.\n");
+
+	return 0;
 }
 
 
@@ -258,7 +260,7 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
     if (notation[0] >= 'A' && notation[0] <= 'H')
     {
-        coordonnees[1] = 65- (int) notation[0];
+        coordonnees[1] = notation[0] - 'A';
     }
     if (notation[1]>= '1' && notation[1] <= '8') {
 	coordonnees[0] = '8' - notation[1];
