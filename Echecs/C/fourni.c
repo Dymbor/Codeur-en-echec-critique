@@ -3,11 +3,6 @@
 #include <stdbool.h>
 #include <time.h> // pour time()
 
-int debug(int depart[2]) {
-    printf("y = %d\n", depart[0]);
-    printf("x = %d\n", depart[1]);
-    return 0;
-}
 
 //////////////////////////////////////////
 // Constantes:
@@ -73,7 +68,7 @@ int couleurAdverse(int couleur);
 int trouveCouleur(const char grille[N][N], int ligne, int colonne);
 bool estMajuscule(char c);
 bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]);
-void saisieCoup(char grille[N][N]);
+void saisieCoup(char grille[N][N], int couleur);
 
 // Implémentation du jeu d'échec:
 void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur);
@@ -87,18 +82,21 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
 
 
 
-int main(void)
-{ 
+int main(void) {
     int num_coup = 0;
     char grille[N][N];
-    int couleur = C_VIDE;
+    int couleur = C_BLANC;
     char copie[N][N];
-    const size_t temps_debut = time(NULL); // temps de départ
+
+    const size_t temps_debut = time(NULL); 
     initialiseEchiquier(grille);
+
     do {
-        afficheEchiquier (grille, num_coup, temps_debut);
-        saisieCoup(grille);
+        afficheEchiquier(grille, num_coup, temps_debut);
+        saisieCoup(grille, couleur);
+        couleur = couleurAdverse(couleur);
         num_coup += 1;
+        partieTerminee(grille, couleur);
     } while (partieTerminee(grille, couleur) == NON_TERMINEE);
 
     afficheEchiquier(grille, num_coup, temps_debut);
@@ -172,30 +170,29 @@ int couleurAdverse(int couleur){
 }
 
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
-	if (estMajuscule(grille[ligne][colonne])){
-		return C_BLANC;
-	}
-	else if (!estMajuscule(grille[ligne][colonne])) {
-		return C_NOIR;
-	}
-    printf("C_VIDE");
-	return C_VIDE;
+	if (grille[ligne][colonne] == CASE_VIDE) {
+        return C_VIDE;
+    }
+    if (estMajuscule(grille[ligne][colonne])){
+        return C_BLANC;
+    }
+    return C_NOIR;
 }
 
-void saisieCoup(char grille[N][N]){
+void saisieCoup(char grille[N][N], int couleur){
     char notation_depart[2], notation_arrivee[2];
     int coordDepart[2], coordArrivee[2];
-
+    int couleurChoisie;
+    
     do {
-        printf("Mettez des coordonnées valides: ");
+        printf("Entrez des coordonnées valides: ");
         scanf("%2s", notation_depart);
         scanf("%2s", notation_arrivee);
         convertitEnCoordonnees(notation_depart, coordDepart);
         convertitEnCoordonnees(notation_arrivee, coordArrivee);
-
-    } while (!estDansGrille(coordDepart[0], coordDepart[1]) || !estDansGrille(coordArrivee[0], coordArrivee[1]));
+        couleurChoisie = trouveCouleur(grille, coordDepart[0], coordDepart[1]);
+    } while (!estDansGrille(coordDepart[0], coordDepart[1]) || !estDansGrille(coordArrivee[0], coordArrivee[1]) || couleurChoisie != couleur);
     realiseCoupSiValide(grille, coordDepart, coordArrivee);
-
 }
 
 int partieTerminee(const char grille[N][N], int couleur){
@@ -220,16 +217,16 @@ int partieTerminee(const char grille[N][N], int couleur){
 
 
 void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
-    // effaceConsole();
+    effaceConsole();
 
-    printf("Coup n°%d\n", num_coup); //défini quel joueur doit jouer
+    printf("Coup n°%d\n", num_coup);
     if(num_coup % 2 == 0){
         printf("Tour du joueur: blanc\n");
     }
     else{
         printf("Tour du joueur: noir\n");}
 
-    printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut); //affiche le temps depuis le début de la partie
+    printf("Temps écoulé: %ld secondes\n", time(NULL) - temps_debut);
     
     printf("   +---+---+---+---+---+---+---+---+\n");
     for (int i = 0; i < N; i++) {
@@ -266,20 +263,18 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 
 bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
     if (notation[0] >= 'A' && notation[0] <= 'H'){
-        coordonnees[1] = (int) notation[0] - 65;
+        coordonnees[1] = notation[0] - 'A';
     }
     if (notation[1]>= '1' && notation[1] <= '8') {
 	    coordonnees[0] = '8' - notation[1];
     }
-    printf("%d %d\n", coordonnees[0], coordonnees[1]);
     return estDansGrille(coordonnees[0], coordonnees[1]);
 }
 
 void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
 	if (!estCaseVide(grille, depart[0], depart[1])) {
         grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
-        grille[depart[0]][depart[1]] = CASE_VIDE;
-    	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant        
+        grille[depart[0]][depart[1]] = CASE_VIDE;        
     }
 }
 
@@ -397,8 +392,6 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
     int j = 0;
     if (piece == 'T' || piece == 't') //Déplacement Tour
     {
-        printf("Départ de la tour:\n");
-        debug(depart);
         int directions[4][2] = {
             {1, 0},
             {0, 1}, 
@@ -412,8 +405,6 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
             while (grille[ligneArrive][colonneArrive] == CASE_VIDE && estDansGrille(ligneArrive, colonneArrive)){
                 deplacements[j][0] = ligneArrive;
                 deplacements[j][1] = colonneArrive;
-                printf("- mouvements %d de la tour:\n", j);
-                debug(deplacements[j]);
                 j++;
                 ligneArrive += directions[i][0];
                 colonneArrive += directions[i][1];
@@ -426,8 +417,6 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
                 deplacements[j][0] = ligneArrive;
                 deplacements[j][1] = colonneArrive;
                 j++;
-                printf("- mouvements %d de la tour:\n", j);
-                debug(deplacements[j]);
             }
         }
         return j;
@@ -457,12 +446,22 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
                 int colonneArrive = depart[1] + i * directions[d][1];
                 int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
                 int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
-                if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
-                    deplacements[j][0] = ligneArrive;
-                    deplacements[j][1] = colonneArrive;
-                    j++;
+                if (couleur_depart == C_BLANC) {
+                    if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                        deplacements[j][0] = ligneArrive;
+                        deplacements[j][1] = colonneArrive;
+                        j++;
+                    }
+                    if (couleur_arrivee == C_BLANC) break;
                 }
-                if (couleur_arrivee == C_BLANC) break;
+                if (couleur_depart == C_NOIR) {
+                    if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                        deplacements[j][0] = ligneArrive;
+                        deplacements[j][1] = colonneArrive;
+                        j++;
+                    }
+                    if (couleur_arrivee == C_NOIR) break;
+                }
             }
         }
         return j;
@@ -476,12 +475,22 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
                 int colonneArrive = depart[1] + i * directions[d][1];
                 int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
                 int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
-                if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
-                    deplacements[j][0] = ligneArrive;
-                    deplacements[j][1] = colonneArrive;
-                    j++;
+                if (couleur_depart == C_BLANC) {
+                    if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                        deplacements[j][0] = ligneArrive;
+                        deplacements[j][1] = colonneArrive;
+                        j++;
+                    }
+                    if (couleur_arrivee == C_BLANC) break;
                 }
-                if (couleur_arrivee == C_BLANC) break;
+                if (couleur_depart == C_NOIR) {
+                    if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                        deplacements[j][0] = ligneArrive;
+                        deplacements[j][1] = colonneArrive;
+                        j++;
+                    }
+                    if (couleur_arrivee == C_NOIR) break;
+                }
             }
         }
         return j;
@@ -513,7 +522,7 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
     else if (piece == 'P' || piece == 'p') //Déplacement Pion
     {
         {
-            int direction = (piece == 'P') ? -1 : 1;//(condition ? valeur si vrai : valeur si faux)
+            int direction = (piece == 'P') ? -1 : 1;
             int startRow = (piece == 'P') ? 6 : 1;
             int ligneArrive = depart[0] + direction;
             if (estDansGrille(ligneArrive, depart[1]) && estCaseVide(grille, ligneArrive, depart[1])){
@@ -527,7 +536,6 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
                 }
             }
             int captures[2][2] = {{ligneArrive, depart[1] - 1}, {ligneArrive, depart[1] + 1}};
-            // les 2 diagonales où le pion peut manger contrairement aux autres pièces
             for (int i = 0; i < 2; i++){
                 if (estDansGrille(captures[i][0], captures[i][1]) &&
                     trouveCouleur(grille, captures[i][0], captures[i][1]) == couleurAdverse(
@@ -540,8 +548,7 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
         }
         return j;
     }
-    else if (piece == CASE_VIDE) //Case depart vide
-    {
+    else if (piece == CASE_VIDE){
         return 0;
     }
 }
