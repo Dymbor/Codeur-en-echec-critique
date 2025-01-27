@@ -3,6 +3,12 @@
 #include <stdbool.h>
 #include <time.h> // pour time()
 
+int debug(int depart[2]) {
+    printf("y = %d\n", depart[0]);
+    printf("x = %d\n", depart[1]);
+    return 0;
+}
+
 //////////////////////////////////////////
 // Constantes:
 
@@ -81,28 +87,25 @@ int listeDeplacementsValides(const char grille[N][N], const int depart[2], int d
 
 
 
-// Main TOM
-
 int main(void)
 { 
-	int num_coup = 0;
-	char grille[N][N];
-	int couleur = C_VIDE;
-	char copie[N][N];
-	const size_t temps_debut = time(NULL); // temps de départ
-	initialiseEchiquier(grille);
-	do {
-		afficheEchiquier (grille, num_coup, temps_debut);
-		saisieCoup(grille);
-		partieTerminee(grille, couleur);
-	} while (partieTerminee(grille, couleur) == NON_TERMINEE);
+    int num_coup = 0;
+    char grille[N][N];
+    int couleur = C_VIDE;
+    char copie[N][N];
+    const size_t temps_debut = time(NULL); // temps de départ
+    initialiseEchiquier(grille);
+    do {
+        afficheEchiquier (grille, num_coup, temps_debut);
+        saisieCoup(grille);
+        num_coup += 1;
+    } while (partieTerminee(grille, couleur) == NON_TERMINEE);
 
-	afficheEchiquier(grille, num_coup, temps_debut);
-	printf("La partie est terminée.\n");
+    afficheEchiquier(grille, num_coup, temps_debut);
+    printf("La partie est terminée.\n");
 
-	return 0;
+    return 0;
 }
-
 
 
 //////////////////////////////////////////
@@ -130,11 +133,6 @@ void afficheCaseEnCouleur(char c, int couleurEnEchec)
 	}
 }
 
-
-bool estDansGrille(int ligne, int colonne){
-	return ligne >= 0 && ligne < N && colonne >= 0 && colonne < N;
-}
-
 void copieGrille(char copie[N][N], const char grille[N][N]){
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
@@ -143,8 +141,16 @@ void copieGrille(char copie[N][N], const char grille[N][N]){
   }
 }
 
+bool estDansGrille(int ligne, int colonne){
+	return ligne >= 0 && ligne < N && colonne >= 0 && colonne < N;
+}
+
 bool estCaseVide(const char grille[N][N], int ligne, int colonne){
 	return grille[ligne][colonne] == CASE_VIDE;
+}
+
+bool estMajuscule (char c) {
+	return 'A' <= c && 'Z' >= c;
 }
 
 void videGrille(char grille[N][N]) {
@@ -154,7 +160,6 @@ void videGrille(char grille[N][N]) {
 		}
 	}
 }
-
 
 int couleurAdverse(int couleur){
 	if (couleur == C_BLANC) {
@@ -166,11 +171,6 @@ int couleurAdverse(int couleur){
 	return C_VIDE;
 }
 
-
-bool estMajuscule (char c) {
-	return 'A' <= c && 'Z' >= c;
-}
-
 int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 	if (estMajuscule(grille[ligne][colonne])){
 		return C_BLANC;
@@ -178,45 +178,52 @@ int trouveCouleur(const char grille[N][N], int ligne, int colonne){
 	else if (!estMajuscule(grille[ligne][colonne])) {
 		return C_NOIR;
 	}
+    printf("C_VIDE");
 	return C_VIDE;
 }
 
 void saisieCoup(char grille[N][N]){
-	//LA FONCTION SAISIE EST FAUSSE, A REFAIRE !! (possibilité avec fgets)
-	char depart[2], arrivee[2];
-  	int coordDepart[2], coordArrivee[2];
-  	do {
-		printf("Allez c'est à vous !! Entrez les coordonnées du coup (du type : E5E7): ");
-		scanf("%2s", depart);
-		scanf("%2s", arrivee);
-  	} while (!convertitEnCoordonnees(depart, coordDepart) || !convertitEnCoordonnees(arrivee, coordArrivee));
-	realiseCoupSiValide(grille, coordDepart, coordArrivee) ;
+    char notation_depart[2], notation_arrivee[2];
+    int coordDepart[2], coordArrivee[2];
+
+    do {
+        printf("Mettez des coordonnées valides: ");
+        scanf("%2s", notation_depart);
+        scanf("%2s", notation_arrivee);
+        convertitEnCoordonnees(notation_depart, coordDepart);
+        convertitEnCoordonnees(notation_arrivee, coordArrivee);
+
+    } while (!estDansGrille(coordDepart[0], coordDepart[1]) || !estDansGrille(coordArrivee[0], coordArrivee[1]));
+    realiseCoupSiValide(grille, coordDepart, coordArrivee);
 
 }
 
-int partieTerminee(const char grille[N][N], int couleur) {
-	//LA FONCTION EST FAUSSE, estEnEchec renvoie un Booleen REFAIRE !!!!
-	 if (estEnEchec(grille, couleur) == 1) {
-		 return DEFAITE_BLANC;
-	 }
-	 else if (estEnEchec(grille, couleur) == 2) { 
-		 return DEFAITE_NOIR;
-	 }
-	 else if (estEnEchec(grille, couleur) == 3) {
-		 return PARTIE_NULLE;
-	 }
-	 else {
-		 return NON_TERMINEE;
-	 }
- }
+int partieTerminee(const char grille[N][N], int couleur){
+    if (estEnEchec(grille, couleur) == true){
+        if (couleur == C_BLANC){
+            printf("Le joueur noir a gagné !\n");
+            return DEFAITE_BLANC;
+        }
+        else if (couleur == C_NOIR){
+            printf("Le joueur blanc a gagné !\n");
+            return DEFAITE_NOIR;
+        }
+        else {
+            printf("Partie nulle !\n");
+            return PARTIE_NULLE;
+        }
+    }
+    else {
+        return NON_TERMINEE;
+    }
+}
 
 
-// Fonctions Ethan:
 void afficheEchiquier(const char grille[N][N], int num_coup, size_t temps_debut){
-    effaceConsole();
+    // effaceConsole();
 
     printf("Coup n°%d\n", num_coup); //défini quel joueur doit jouer
-    if(num_coup % 2 != 0){
+    if(num_coup % 2 == 0){
         printf("Tour du joueur: blanc\n");
     }
     else{
@@ -258,28 +265,83 @@ void trouvePositionRoi(const char grille[N][N], int positionRoi[2], int couleur)
 
 
 bool convertitEnCoordonnees(const char notation[2], int coordonnees[2]){
-    if (notation[0] >= 'A' && notation[0] <= 'H')
-    {
-        coordonnees[1] = notation[0] - 'A';
+    if (notation[0] >= 'A' && notation[0] <= 'H'){
+        coordonnees[1] = (int) notation[0] - 65;
     }
     if (notation[1]>= '1' && notation[1] <= '8') {
-	coordonnees[0] = '8' - notation[1];
+	    coordonnees[0] = '8' - notation[1];
     }
+    printf("%d %d\n", coordonnees[0], coordonnees[1]);
     return estDansGrille(coordonnees[0], coordonnees[1]);
 }
 
 void realiseCoup(char grille[N][N], const int depart[2], const int arrivee[2]) {
 	if (!estCaseVide(grille, depart[0], depart[1])) {
-		grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
-		grille[depart[0]][depart[1]] = CASE_VIDE;
-	}
-	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant
+        grille[arrivee[0]][arrivee[1]] = grille[depart[0]][depart[1]];
+        grille[depart[0]][depart[1]] = CASE_VIDE;
+    	//faire les bonus dans cette fonction, roque, passage du pion a la reine ou autres, et la prise en passant        
+    }
 }
 
 bool realiseCoupSiValide(char grille[N][N], const int depart[2], const int arrivee[2]) {
 	if (estDansGrille(arrivee[0], arrivee[1]) && estDeplacementValide(grille, depart, arrivee) && estCoupValide(grille, depart, arrivee)) {
-		realiseCoup(grille, depart, arrivee);
-		return true;
+        char nom_case;
+        int choix;
+        if ((grille[depart[0]][depart[1]] == 'P' || grille[depart[0]][depart[1]] == 'p') && (arrivee[0] == 0 || arrivee[0] == 7)) {
+            printf("Votre pion a atteint le fond du plateau, vous avez accès à la promotion du pion:\n");
+            printf("1: Une Dame\n");
+            printf("2: Une Tour\n");
+            printf("3: Un Fou\n");
+            printf("4: Un Cavalier\n");
+            scanf("%d", &choix);
+            int couleur = (grille[depart[0]][depart[1]] == 'P') ? C_BLANC : C_NOIR;
+
+            if (couleur == C_BLANC) {
+                switch (choix) {
+                    case 1:
+                        nom_case = 'D';
+                        break;
+                    case 2:
+                        nom_case = 'T';
+                        break; 
+                    case 3:
+                        nom_case = 'F';
+                        break;
+                    case 4:
+                        nom_case = 'C';
+                        break;
+                }
+                grille[arrivee[0]][arrivee[1]] = nom_case;
+                grille[depart[0]][depart[1]] = CASE_VIDE;
+                realiseCoup(grille, depart, arrivee);
+                return true;
+            }
+            if (couleur == C_NOIR) {
+                switch (choix) {
+                    case 1:
+                        nom_case = 'd';
+                        break;
+                    case 2:
+                        nom_case = 't';
+                        break; 
+                    case 3:
+                        nom_case = 'f';
+                        break;
+                    case 4:
+                        nom_case = 'c';
+                        break;
+                }
+                grille[arrivee[0]][arrivee[1]] = nom_case;
+                grille[depart[0]][depart[1]] = CASE_VIDE;
+                realiseCoup(grille, depart, arrivee);
+                return true;
+            }
+        }
+        else {
+            realiseCoup(grille, depart, arrivee);
+            return true;
+        }
+		
 	}
 	return false;
 }
@@ -292,7 +354,7 @@ bool estCoupValide(const char grille[N][N], const int depart[2], const int arriv
 		char copie[N][N];
 		copieGrille(copie, grille);
 		realiseCoup(copie, depart, arrivee);
-		if(estEnEchec(copie, trouveCouleur(grille, depart[0], depart[1]))){
+		if (estEnEchec(copie, trouveCouleur(grille, depart[0], depart[1]))){
 			return false;
 		}
 		else{
@@ -302,7 +364,7 @@ bool estCoupValide(const char grille[N][N], const int depart[2], const int arriv
 }
 
 void initialiseEchiquier(char grille[N][N]){
-	//pour la premiere ligne noir et blanc
+	
 	videGrille(grille);
 	char P_BLANC[] = {'T','C','F','D','R','F','C','T'};
 	char P_NOIR[] = {'t','c','f','d','r','f','c','t'};
@@ -310,14 +372,197 @@ void initialiseEchiquier(char grille[N][N]){
 		grille[0][i] = P_NOIR[i];
 		grille[7][i] = P_BLANC[i];
 	}
-
-	//pour la ligne des pions noir
 	for (int i=0;i<N;i++){
 		grille[1][i]='p';
+        grille[6][i]='P';
 	}
+}
 
-	//pour la ligne des pions blanc
-	for (int i=0;i<N;i++){
-		grille[6][i]='P';
-	}
+bool estDeplacementValide(const char grille[N][N], const int depart[2], const int arrivee[2])
+{
+    int deplacements[NB_MAX_DEPL][2];
+    int colonneArriveeDemande = arrivee[0];
+    int ligneArriveeDemande = arrivee[1];
+    int j = listeDeplacementsValides(grille, depart, deplacements);
+    for (int i = 0; i < j; i++){
+        if(colonneArriveeDemande == deplacements[i][0] && ligneArriveeDemande == deplacements[i][1]){
+            return true;
+        }
+    }
+    return false;
+}
+
+int listeDeplacementsValides(const char grille[N][N], const int depart[2], int deplacements[NB_MAX_DEPL][2]){
+    char piece = grille[depart[0]][depart[1]];
+    int j = 0;
+    if (piece == 'T' || piece == 't') //Déplacement Tour
+    {
+        printf("Départ de la tour:\n");
+        debug(depart);
+        int directions[4][2] = {
+            {1, 0},
+            {0, 1}, 
+            {0, -1},
+            {-1, 0}
+        };
+
+        for (int i = 0; i < 4; i++){
+            int ligneArrive = depart[0] + directions[i][0];
+            int colonneArrive = depart[1] + directions[i][1];
+            while (grille[ligneArrive][colonneArrive] == CASE_VIDE && estDansGrille(ligneArrive, colonneArrive)){
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                printf("- mouvements %d de la tour:\n", j);
+                debug(deplacements[j]);
+                j++;
+                ligneArrive += directions[i][0];
+                colonneArrive += directions[i][1];
+            }
+
+            int couleur_depart = trouveCouleur(grille, depart[0], depart[1]);
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+
+            if (couleur_arrivee != couleur_depart && estDansGrille(ligneArrive, colonneArrive)){
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                j++;
+                printf("- mouvements %d de la tour:\n", j);
+                debug(deplacements[j]);
+            }
+        }
+        return j;
+    }
+    else if (piece == 'C' || piece == 'c') //Déplacement Cavalier
+    {
+        int moves[8][2] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+        for (int i = 0; i < 8; i++){
+            int ligneArrive = depart[0] + moves[i][0];
+            int colonneArrive = depart[1] + moves[i][1];
+            int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+            if (estDansGrille(ligneArrive, colonneArrive) && couleur_depart != couleur_arrivee){
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = colonneArrive;
+                j++;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'F' || piece == 'f') //Déplacement Fou
+    {
+        int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int d = 0; d < 4; d++) {
+            for (int i = 1; i < N; i++) {
+                int ligneArrive = depart[0] + i * directions[d][0];
+                int colonneArrive = depart[1] + i * directions[d][1];
+                int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+                int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+                if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                    deplacements[j][0] = ligneArrive;
+                    deplacements[j][1] = colonneArrive;
+                    j++;
+                }
+                if (couleur_arrivee == C_BLANC) break;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'D' || piece == 'd') //Déplacement Dame
+    {
+        int directions[8][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int d = 0; d < 8; d++){
+            for (int i = 1; i < N; i++){
+                int ligneArrive = depart[0] + i * directions[d][0];
+                int colonneArrive = depart[1] + i * directions[d][1];
+                int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+                int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+                if (estDansGrille(ligneArrive, colonneArrive) && (couleur_arrivee != couleur_depart)){
+                    deplacements[j][0] = ligneArrive;
+                    deplacements[j][1] = colonneArrive;
+                    j++;
+                }
+                if (couleur_arrivee == C_BLANC) break;
+            }
+        }
+        return j;
+    }
+    else if (piece == 'R' || piece == 'r') //Déplacement Roi
+    {
+        int deplacement[8][2] = {
+            {1, 1}, {1, 0}, {1, -1},
+            {0, 1}, {0, -1},
+            {-1, 1}, {-1, 0}, {-1, -1}
+        };
+
+        for (int i = 0; i < N; i++){
+            int ligneArrive = depart[0] + deplacement[i][0];
+            int colonneArrive = depart[1] + deplacement[i][1];
+            int couleur_depart = estMajuscule(piece) ? C_BLANC : C_NOIR;
+            int couleur_arrivee = trouveCouleur(grille, ligneArrive, colonneArrive);
+
+            if (estDansGrille(ligneArrive, colonneArrive)){
+                if (couleur_depart != couleur_arrivee){
+                    deplacements[j][0] = deplacement[i][0];
+                    deplacements[j][1] = deplacement[i][1];
+                    j++;
+                }
+            }
+        }
+        return j;
+    }
+    else if (piece == 'P' || piece == 'p') //Déplacement Pion
+    {
+        {
+            int direction = (piece == 'P') ? -1 : 1;//(condition ? valeur si vrai : valeur si faux)
+            int startRow = (piece == 'P') ? 6 : 1;
+            int ligneArrive = depart[0] + direction;
+            if (estDansGrille(ligneArrive, depart[1]) && estCaseVide(grille, ligneArrive, depart[1])){
+                deplacements[j][0] = ligneArrive;
+                deplacements[j][1] = depart[1];
+                j++;
+                if (depart[0] == startRow && estCaseVide(grille, ligneArrive + direction, depart[1])){
+                    deplacements[j][0] = ligneArrive + direction;
+                    deplacements[j][1] = depart[1];
+                    j++;
+                }
+            }
+            int captures[2][2] = {{ligneArrive, depart[1] - 1}, {ligneArrive, depart[1] + 1}};
+            // les 2 diagonales où le pion peut manger contrairement aux autres pièces
+            for (int i = 0; i < 2; i++){
+                if (estDansGrille(captures[i][0], captures[i][1]) &&
+                    trouveCouleur(grille, captures[i][0], captures[i][1]) == couleurAdverse(
+                        trouveCouleur(grille, depart[0], depart[1]))){
+                    deplacements[j][0] = captures[i][0];
+                    deplacements[j][1] = captures[i][1];
+                    j++;
+                }
+            }
+        }
+        return j;
+    }
+    else if (piece == CASE_VIDE) //Case depart vide
+    {
+        return 0;
+    }
+}
+
+
+
+
+bool estEnEchec(const char grille[N][N], int couleur) {
+    int positionRoi[2];
+    trouvePositionRoi(grille, positionRoi, couleur); // Trouve la position du roi de la couleur donnée
+    
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            int depart[2] = {i, j};
+            if (trouveCouleur(grille, i, j) == couleurAdverse(couleur)) { // Si c'est une pièce adverse
+                int arrivee[2] = {positionRoi[0], positionRoi[1]};
+                if (estDeplacementValide(grille, depart, arrivee)) { // Si la pièce peut se déplacer sur la case du roi
+                    return true; 
+                }
+            }
+        }
+    }
+    return false;
 }
